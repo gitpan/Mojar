@@ -1,0 +1,16 @@
+debian/changelog
+lib/Mojar.pm
+lib/Mojar/Cache.pm
+lib/Mojar/Util.pm
+LICENSE
+Makefile.PL
+MANIFEST			This list of files
+MANIFEST.SKIP
+README.md
+test/00-load.t
+test/10-util.t
+test/11-cache.t
+test/manifest.t
+test/pod.t
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)

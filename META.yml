@@ -1,0 +1,29 @@
+---
+abstract: 'Interface integration toolkit'
+author:
+  - 'Nic Sandfield <niczero@cpan.org>'
+build_requires:
+  Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.3
+dynamic_config: 1
+generated_by: 'ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120630'
+license: artistic_2
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Mojar
+no_index:
+  directory:
+    - t
+    - inc
+    - test
+requires:
+  Mojolicious: 3.33
+  perl: 5.010001
+resources:
+  bugtracker: http://github.com/niczero/mojar/issues
+  homepage: http://niczero.github.com/mojar
+  license: http://www.opensource.org/licenses/artistic-license-2.0
+  repository: http://github.com/niczero/mojar
+version: 0.017
