@@ -4,7 +4,7 @@
       "Nic Sandfield <niczero@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120630",
+   "generated_by" : "ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "artistic_2"
    ],
@@ -17,6 +17,8 @@
       "directory" : [
          "t",
          "inc",
+         "cfg",
+         "data",
          "test"
       ]
    },
@@ -28,7 +30,7 @@
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.3"
+            "ExtUtils::MakeMaker" : "6.30"
          }
       },
       "runtime" : {
@@ -51,5 +53,5 @@
          "url" : "http://github.com/niczero/mojar"
       }
    },
-   "version" : "0.017"
+   "version" : "1.062"
 }
