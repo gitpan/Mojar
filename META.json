@@ -35,7 +35,7 @@
       },
       "runtime" : {
          "requires" : {
-            "Mojolicious" : "3.33",
+            "Mojolicious" : "5.00",
             "perl" : "5.010001"
          }
       }
@@ -53,5 +53,5 @@
          "url" : "http://github.com/niczero/mojar"
       }
    },
-   "version" : "1.062"
+   "version" : "2.001"
 }

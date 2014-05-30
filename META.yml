@@ -21,11 +21,11 @@ no_index:
     - data
     - test
 requires:
-  Mojolicious: 3.33
+  Mojolicious: 5.00
   perl: 5.010001
 resources:
   bugtracker: http://github.com/niczero/mojar/issues
   homepage: http://niczero.github.com/mojar
   license: http://www.opensource.org/licenses/artistic-license-2.0
   repository: http://github.com/niczero/mojar
-version: 1.062
+version: 2.001
