@@ -1,18 +1,29 @@
 package Mojar::Util;
 use Mojo::Base -strict;
 
-our @EXPORT_OK = qw(check_exists dumper hash_or_hashref lc_keys loaded_path
-    merge snakecase spurt transcribe unsnakecase);
+our $VERSION = 0.341;
 
+use B;
+use Carp 'croak';
 use Exporter 'import';
 use Scalar::Util 'reftype';
 use Storable 'dclone';
 
-# Private function
-
-sub croak ($) { require Carp; goto &Carp::croak; }
+our @EXPORT_OK = qw(as_bool been_numeric check_exists dumper hash_or_hashref
+    loaded_path lc_keys merge snakecase spurt transcribe unsnakecase);
 
 # Public functions
+
+sub as_bool {
+  my ($val) = shift;
+  return !! $val if been_numeric($val) or not defined $val;
+  $val = lc "$val";
+  return !! 1
+    if $val eq '1' or $val eq 'true' or $val eq 'yes' or $val eq 'on';
+  return !! undef
+    if $val eq '0' or $val eq 'false' or $val eq 'no' or $val eq 'off';
+  return !! $val;
+}
 
 sub dumper {
   no warnings 'once';
@@ -133,12 +144,24 @@ sub loaded_path {
   return undef;
 }
 
-sub spurt {
-  my ($path, @content) = @_;
+sub been_numeric {
+  my $value = shift;
+  # From Mojo::JSON
+  return 1 if B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK)
+      and 0 + $value eq $value and $value * 0 == 0;
+}
+
+sub spurt (@) {
+  my $path = shift;
+  my $lines = ref $_[-1] eq 'ARRAY' ? pop : \@_;
+  my $count = 0;
+
   die qq{Can't open file "$path": $!} unless open my $file, '>', $path;
-  my $string = join '', @content;
-  die qq{Can't write to file "$path": $!} unless $file->syswrite($string);
-  return $string;
+  $file->syswrite('');
+  local $_;
+  $file->syswrite($_), $file->syswrite($/) and ++$count for @$lines;
+  close $file;
+  return $count;
 }
 
 sub hash_or_hashref {
@@ -259,6 +282,26 @@ Miscellaneous utility functions.
 
 =head1 FUNCTIONS
 
+=head2 as_bool
+
+  $boolean = as_bool($val);
+
+Convert arbitrary scalar to a Boolean, intended to accommodate strings
+equivalent to on/off, true/false, yes/no.  The following are true.
+
+  as_bool('ON'), as_bool('true'), as_bool(42), as_bool('Yes'), as_bool('NO!')
+
+The following are false.
+
+  as_bool('off'), as_bool('False'), as_bool(0), as_bool('NO'), as_bool(undef)
+
+=head2 been_numeric
+
+  $probably_a_number = been_numeric($val);
+
+Introspects a flag indicating whether the value has been treated as a number.
+cf: L<Scalar::Util::looks_like_number>.
+
 =head2 snakecase
 
   $snakecase = snakecase $titlecase;
@@ -331,13 +374,15 @@ swap between values, as shown in that last example.
 
   my $written_string = spurt $path, @content;
 
-  spurt '/tmp/test.txt', "Some\ntext\n";
-  spurt '/tmp/test.txt', "More\n", "text\n";  # overwrites previous content
+  spurt '/tmp/test.txt', "Some\ntext";
+  spurt '/tmp/test.txt', 'Replacement', 'text';
+  $lines = spurt '/tmp/test.txt', ['Other', 'text'];  # 2
 
 Similar to L<Mojo::Util>::spurt but with opposite argument order and accepting
-list of content.  If passed a list, it joins the parts together before writing.
+list of content.  After the file path, each argument is written as a line.
+Returns the number of lines written.
 
-  ->syswrite(join '', @content)
+  ->syswrite(join "\n", @content)->syswrite("\n")
 
 =head2 dumper
 
